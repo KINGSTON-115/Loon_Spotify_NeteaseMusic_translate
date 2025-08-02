@@ -1,0 +1,2 @@
+WangYiYun.plugin带了解锁和网易云双语歌词功能，一体插件
+WangYiYunFanYi.plugin只包含网易云双语歌词功能，解锁和去广告等功能可以搭配其它大佬的插件
