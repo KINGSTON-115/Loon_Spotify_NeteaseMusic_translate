@@ -1,0 +1,36 @@
+#!name = Spotify歌词翻译(Charles修改版)
+#!desc = 将Spotify的外语歌词翻译为简体中文（网易云音乐）
+#!openUrl = 
+#!author =CharlesLeon[https://DualSubs.github.io/guide/spotify]
+#!homepage = https://github.com/KINGSTON-115
+#!icon = https://github.com/Moli-X/Resources/raw/main/Icon/Image/Spotify.png
+#!Edit = https://github.com/Moli-X/Resources/edit/main/Loon/Spotify/Spotify.plugin
+
+# 原链接：https://raw.githubusercontent.com/app2smile/rules/master/plugin/spotify.plugin
+# 原链接: https://github.com/DualSubs/Spotify/releases/latest/download/DualSubs.Spotify.plugin
+# 原链接：https://DualSubs.github.io/guide/spotify
+
+
+[Script]
+
+# 处理歌曲信息
+http-response ^https?:\/\/api\.spotify\.com\/v1\/tracks\? requires-body=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.9/response.bundle.js, tag=🍿️ 处理歌曲信息
+
+# 歌词请求处理
+http-request ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json requires-body=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.9/request.bundle.js, tag=🍿️ 请求网易云歌词
+
+http-request ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/\w+\?(.*) requires-body=1, binary-body-mode=1, script-path=https://github.com/DualSubs/Spotify/releases/download/v1.9.9/request.bundle.js, tag=🍿️ 请求网易云歌词(Protobuf)
+
+# 翻译处理（使用网易云自带翻译）
+http-response ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json(.*)subtype=Translate requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ 提取网易云自带翻译
+
+http-response ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/\w+\?(.*)subtype=Translate requires-body=1, binary-body-mode=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ 提取网易云自带翻译(Protobuf)
+
+# 外部歌词响应处理
+http-response ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json(.*)subtype=External requires-body=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ 显示网易云歌词
+
+http-response ^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/\w+\?(.*)subtype=External requires-body=1, binary-body-mode=1, script-path=https://github.com/DualSubs/Universal/releases/latest/download/External.Lyrics.response.bundle.js, tag=🍿️ 显示网易云歌词(Protobuf)
+
+
+[MITM]
+hostname = api.spotify.com, spclient.wg.spotify.com
